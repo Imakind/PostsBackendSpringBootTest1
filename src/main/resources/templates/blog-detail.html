@@ -12,9 +12,11 @@
     <div th:each="el : ${post}" class="alert alert-into mt-2">
         <h3 th:text="${el.title}"></h3>
         <p th:text="${el.full_text}"></p>
-        <p th:text="${el.views}"></p>
+        <p> <b>Views:</b> <span th:text="${el.views}" /></p>
         <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning">Edit</a>
-        <a th:href="'/blog/' + ${el.id} + '/delete'" class="btn btn-warning">Delete</a>
+        <form th:action="'/blog/' + ${el.id} + '/delete'" th:method="post">
+            <button class="btn btn-warning" type="submit">Delete</button>
+        </form>
     </div>
 </div>
 
