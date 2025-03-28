@@ -2,9 +2,11 @@ package com.akzhan.springmvcApp.controllers;
 
 import com.akzhan.springmvcApp.models.Post;
 import com.akzhan.springmvcApp.repo.PostRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,15 +30,20 @@ public class BlogController {
 
     @GetMapping("/blog/add")
     public String blogAdd(Model model) {
+        model.addAttribute("post", new Post());
         return "blog-add";
     }
 
     @PostMapping("/blog/add")
-    public String blogAddPost(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text) {
-        Post post = new Post(title, anons, full_text);
-        postRepository.save(post);
+    public String blogAddPost(@Valid Post post, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("post", post); // Возвращаем объект обратно в модель для отображения ошибок
+            return "blog-add";
+        }
+        postRepository.save(post); // Сохраняем объект напрямую
         return "redirect:/blog";
     }
+
 
     @GetMapping("/blog/{id}")
     public String blogDetail(Model model, @PathVariable(value="id") long id) {

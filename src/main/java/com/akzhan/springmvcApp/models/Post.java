@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class Post {
@@ -12,8 +15,11 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title, anons, full_text;
+    @NotBlank(message = "Should be not empty")
+    @Size(min = 2, max = 50, message = "Should be between 2-50")
+    private String title;
+    private String anons;
+    private String full_text;
     private int views;
 
     public Post(String title, String anons, String full_text) {
